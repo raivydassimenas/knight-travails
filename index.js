@@ -7,22 +7,24 @@ for (let i = 0; i < 8; i++) {
 
 console.log(board);
 
-const initialSquare = [parseInt(Math.random() * 8), parseInt(Math.random() * 8)];
-const finalSquare = [parseInt(Math.random() * 8), parseInt(Math.random() * 8)];
+const initialSquare = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)];
+const finalSquare = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)];
 
 const shortestPath = [initialSquare];
 
 function availableMoves(currSquare, board) {
     const possibilities = [
-        [currSquare - 2, currSquare - 1],
-        [currSquare - 1, currSquare - 2],
-        [currSquare + 1, currSquare - 2],
-        [currSquare + 2, currSquare - 1],
-        [currSquare + 2, currSquare + 1],
-        [currSquare + 1, currSquare + 2],
-        [currSquare - 1, currSquare + 2],
-        [currSquare - 2, currSquare + 1]
+        [currSquare[0] - 2, currSquare[1] - 1],
+        [currSquare[0] - 1, currSquare[1] - 2],
+        [currSquare[0] + 1, currSquare[1] - 2],
+        [currSquare[0] + 2, currSquare[1] - 1],
+        [currSquare[0] + 2, currSquare[1] + 1],
+        [currSquare[0] + 1, currSquare[1] + 2],
+        [currSquare[0] - 1, currSquare[1] + 2],
+        [currSquare[0] - 2, currSquare[1] + 1]
     ];
 
-    return possibilities.filter(item => board.includes(item));
+    return possibilities.filter(item => board.some(square => square.every((value, index) => value === item[index])));
 }
+
+console.log(availableMoves([0, 0], board));

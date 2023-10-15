@@ -5,8 +5,6 @@ for (let i = 0; i < 8; i++) {
     }
 }
 
-console.log(board);
-
 const initialSquare = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)];
 const finalSquare = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)];
 

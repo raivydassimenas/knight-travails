@@ -30,7 +30,7 @@ function arraysAreEqual(arr1, arr2) {
 let availableNodes = [initialSquare];
 const visited = new Set([JSON.stringify(initialSquare)]);
 
-console.log(`Initial square: [${initialSquare}], final square:  [${finalSquare}]`);
+console.log(`Initial square: [${initialSquare}], final square: [${finalSquare}]`);
 
 function breadthFirstSearch(initialSquare, finalSquare, availableNodes, visited) {
     const previousNodes = {};

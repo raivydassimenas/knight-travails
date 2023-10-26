@@ -23,13 +23,25 @@ function availableMoves(currSquare, board) {
     return possibilities.filter(item => board.some(square => square.every((value, index) => value === item[index])));
 }
 
-console.log(availableMoves([0, 0], board));
+function arraysAreEqual(arr1, arr2) {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+function arrayContainsArrayAsElement(arr1, arr2) {
+    return arr1.some(element => {
+        if (element.length === arr2.length) {
+            return element.every((value, index) => value === arr2[index])
+        }
+        return false;
+    })
+}
+
 
 let availableNodes = [initialSquare];
 const visited = [];
 
 function breadthFirstSearch({currNode, parent} = {currNode: initialSquare, parent: null}) {
-    if (currNode === finalSquare) {
+    if (arraysAreEqual(currNode, finalSquare)) {
         console.log("The path has been found.");
         console.log(getShortestPath(visited, currNode));
         return;
@@ -43,7 +55,7 @@ function breadthFirstSearch({currNode, parent} = {currNode: initialSquare, paren
     visited.push({currNode, parent});
 
     const newNodes = availableMoves(currNode, board);
-    board = board.filter(item => !newNodes.includes(item));
+    board = board.filter(item => !arrayContainsArrayAsElement(newNodes, item) && !arraysAreEqual(item, currNode));
     availableNodes = [...availableNodes, ...newNodes];
 
     const newParent = currNode;

@@ -27,51 +27,46 @@ function arraysAreEqual(arr1, arr2) {
     return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
 
-function arrayContainsArrayAsElement(arr1, arr2) {
-    return arr1.some(element => {
-        if (element.length === arr2.length) {
-            return element.every((value, index) => value === arr2[index])
-        }
-        return false;
-    })
-}
-
-
 let availableNodes = [initialSquare];
-const visited = [];
+const visited = new Set([JSON.stringify(initialSquare)]);
 
-function breadthFirstSearch({currNode, parent} = {currNode: initialSquare, parent: null}) {
-    if (arraysAreEqual(currNode, finalSquare)) {
-        console.log("The path has been found.");
-        console.log(getShortestPath(visited, currNode));
-        return;
+console.log(`Initial square: [${initialSquare}], final square:  [${finalSquare}]`);
+
+function breadthFirstSearch(initialSquare, finalSquare, availableNodes, visited) {
+    const previousNodes = {};
+
+    while (availableNodes.length > 0) {
+        const currentSquare = availableNodes.shift();
+
+        if (arraysAreEqual(currentSquare, finalSquare)) {
+            console.log("Path has been found");
+            console.log(getShortestPath(previousNodes, currentSquare, initialSquare));
+            return;
+        }
+
+        const newSquares = availableMoves(currentSquare, board);
+
+        for (let i = 0; i <  newSquares.length; i++) {
+            if (!visited.has(JSON.stringify(newSquares[i]))) {
+                visited.add(JSON.stringify(newSquares[i]));
+                availableNodes.push(newSquares[i]);
+                previousNodes[JSON.stringify(newSquares[i])] = currentSquare;
+            }
+        }
     }
-
-    if (availableNodes.length === 0) {
-        console.log(`The path from ${initialSquare} to ${finalSquare} is impossible.`);
-        return;
-    }
-
-    visited.push({currNode, parent});
-
-    const newNodes = availableMoves(currNode, board);
-    board = board.filter(item => !arrayContainsArrayAsElement(newNodes, item) && !arraysAreEqual(item, currNode));
-    availableNodes = [...availableNodes, ...newNodes];
-
-    const newParent = currNode;
-    const newCurrNode = availableNodes.shift();
-
-    breadthFirstSearch({currNode: newCurrNode, parent: newParent});
 }
 
-function getShortestPath(visited, currNode) {
-    const path = [];
-    while (currNode !== null) {
-        visited.unshift(currNode);
-        currNode = visited.filter(item => item.currNode === currNode)[0].parent;
+function getShortestPath(previousNodes, currentSquare, initialSquare) {
+    path = [];
+    while (!arraysAreEqual(currentSquare, initialSquare)) {
+        path.unshift(currentSquare);
+        currentSquare = previousNodes[JSON.stringify(currentSquare)];
     }
-
+    path.unshift(initialSquare);
     return path;
 }
 
-breadthFirstSearch();
+breadthFirstSearch(initialSquare,
+    finalSquare,
+    availableNodes,
+    visited);
